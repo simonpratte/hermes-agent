@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { BUILTIN_THEME_LIST, BUILTIN_THEMES, DEFAULT_SKIN_NAME, DEFAULT_TYPOGRAPHY, EMOJI_FALLBACK } from './presets'
-
-describe('default desktop theme', () => {
-  it('uses the crimson ember palette for new installations', () => {
-    expect(DEFAULT_SKIN_NAME).toBe('ember')
-    expect(BUILTIN_THEMES[DEFAULT_SKIN_NAME]?.colors.ring).toBe('#dc2626')
-  })
-})
+import { BUILTIN_THEME_LIST, DEFAULT_TYPOGRAPHY, EMOJI_FALLBACK } from './presets'
 
 // #40364: none of the UI text/mono fonts carry emoji glyphs, so every font
 // stack must end with a color-emoji fallback or emoji render as tofu on

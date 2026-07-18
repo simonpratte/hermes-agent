@@ -38,6 +38,28 @@ describe('user theme registry', () => {
     expect(window.localStorage.getItem('hermes-desktop-user-themes-v1')).toContain(theme.name)
   })
 
+  it('replaces Night Owl Black purple accent controls with crimson', () => {
+    const nightOwl = makeTheme('Night Owl Black')
+    nightOwl.name = 'vsc-night-owl-black'
+    nightOwl.colors.primary = '#c792ea'
+    nightOwl.colors.accent = '#292d3e'
+    nightOwl.colors.ring = '#c792ea'
+    nightOwl.colors.midground = '#c792ea'
+    nightOwl.colors.composerRing = '#c792ea'
+
+    const stored = installUserTheme(nightOwl)
+
+    expect(stored.colors).toMatchObject({
+      primary: '#ef4444',
+      accent: '#3f151b',
+      ring: '#ef4444',
+      midground: '#ef4444',
+      composerRing: '#ef4444'
+    })
+    expect(stored.colors.background).toBe(nightOwl.colors.background)
+    expect($userThemes.get()['vsc-night-owl-black']).toEqual(stored)
+  })
+
   it('lists built-ins before user themes', () => {
     installUserTheme(makeTheme('Custom'))
     const names = listAllThemes().map(t => t.name)

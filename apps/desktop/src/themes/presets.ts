@@ -156,8 +156,8 @@ export const emberTheme: DesktopTheme = {
     accentForeground: '#e8c080',
     border: '#3a1c08',
     input: '#3a1c08',
-    ring: '#dc2626',
-    midground: '#dc2626',
+    ring: '#d97316',
+    midground: '#d97316',
     destructive: '#c43010',
     destructiveForeground: '#fef2f2',
     sidebarBackground: '#100600',
@@ -288,5 +288,5 @@ export const BUILTIN_THEMES: Record<string, DesktopTheme> = {
 
 export const BUILTIN_THEME_LIST = Object.values(BUILTIN_THEMES)
 
-/** Default skin for new installations and profiles with no appearance preference. */
-export const DEFAULT_SKIN_NAME = 'ember'
+/** Skin used when nothing is persisted or the persisted name is retired. */
+export const DEFAULT_SKIN_NAME = 'nous'

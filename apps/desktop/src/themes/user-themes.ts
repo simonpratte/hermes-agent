@@ -19,6 +19,36 @@ import type { DesktopTheme, DesktopThemeColors } from './types'
 
 const USER_THEMES_KEY = 'hermes-desktop-user-themes-v1'
 
+// This fork keeps the user's existing Night Owl Black import, but replaces its
+// purple interaction accents with crimson across buttons, focus rings, active
+// controls, and the composer outline.
+const NIGHT_OWL_BLACK_THEME = 'vsc-night-owl-black'
+const CRIMSON = '#ef4444'
+
+const withCrimsonAccent = (colors: DesktopThemeColors): DesktopThemeColors => ({
+  ...colors,
+  primary: CRIMSON,
+  primaryForeground: '#fffafa',
+  accent: '#3f151b',
+  accentForeground: '#ffe4e6',
+  ring: CRIMSON,
+  midground: CRIMSON,
+  midgroundForeground: '#fffafa',
+  composerRing: CRIMSON
+})
+
+function applyForkThemeOverrides(theme: DesktopTheme): DesktopTheme {
+  if (theme.name !== NIGHT_OWL_BLACK_THEME) {
+    return theme
+  }
+
+  return {
+    ...theme,
+    colors: withCrimsonAccent(theme.colors),
+    ...(theme.darkColors ? { darkColors: withCrimsonAccent(theme.darkColors) } : {})
+  }
+}
+
 // Marketplace imports stamp their description "VS Code · <publisher.extension>"
 // (see `convertVscodeColorTheme`). This is the one place that convention is read
 // back out, so every install surface can tell what's already installed.
@@ -64,7 +94,7 @@ function readStored(): Record<string, DesktopTheme> {
     for (const [key, value] of Object.entries(parsed)) {
       // Never let a stored theme shadow a built-in name.
       if (!BUILTIN_THEMES[key] && isValidTheme(value)) {
-        out[key] = value
+        out[key] = applyForkThemeOverrides(value)
       }
     }
 
@@ -95,11 +125,12 @@ export function installUserTheme(theme: DesktopTheme): DesktopTheme {
     throw new Error('Theme is missing required colors.')
   }
 
-  const next = { ...$userThemes.get(), [theme.name]: theme }
+  const customized = applyForkThemeOverrides(theme)
+  const next = { ...$userThemes.get(), [customized.name]: customized }
   $userThemes.set(next)
   persist(next)
 
-  return theme
+  return customized
 }
 
 /** Remove a user theme by slug. No-op for unknown / built-in names. */
